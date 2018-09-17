@@ -52,5 +52,6 @@ const DlMatrix = function(ctxRoot){
 
 /* Export for node.js */
 if(module) {
-	module.exports = DlMatrix();
+	let ctx = DlMatrix();
+	module.exports = ctx.DlMatrix;
 }

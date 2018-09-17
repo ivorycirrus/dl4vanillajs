@@ -49,3 +49,8 @@ const DlMatrix = function(ctxRoot){
 	/* Export */
 	return _root;
 };
+
+/* Export for node.js */
+if(module) {
+	module.exports = DlMatrix();
+}

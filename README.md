@@ -1,6 +1,6 @@
-# Deep Learning for Vanilla JS
+# Deep Learning Library using VanillaJS
 
-**dl4vanillajs** is a deeplearning implementation written in Vanilla JS. 
+**dl4vanillajs** is a deeplearning implementation written in VanillaJS. 
 
 [Vanilla JS](http://vanilla-js.com/) is the alias of pure JavaScript. It does not depends on any frameworks or libraries. <br/>
 There are a web browser which supports Javascript/ECMA-Script, all of running and developing environment is prepared.

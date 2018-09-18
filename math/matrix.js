@@ -93,6 +93,47 @@ const DlMatrix = function(ctxRoot){
 		}
 	};
 
+	/* Max */
+	let _matrix_max = function(arr){
+		if(!Array.isArray(arr)) throw "MatrixException : first parameter is not array.";
+		else if(arr.length == 0) return null;
+		else {
+			let reducer = function(prev, curr){
+				const prevMax = (Array.isArray(prev))?prev.reduce(reducer):prev;
+				const currMax = (Array.isArray(curr))?curr.reduce(reducer):curr;
+				return Math.max(prevMax, currMax);
+			};
+			return arr.reduce(reducer);
+		}
+	};
+
+	/* Min */
+	let _matrix_min = function(arr){
+		if(!Array.isArray(arr)) throw "MatrixException : first parameter is not array.";
+		else if(arr.length == 0) return null;
+		else {
+			let reducer = function(prev, curr){
+				const prevMin = (Array.isArray(prev))?prev.reduce(reducer):prev;
+				const currMin = (Array.isArray(curr))?curr.reduce(reducer):curr;
+				return Math.min(prevMin, currMin);
+			};
+			return arr.reduce(reducer);
+		}
+	};
+
+	/* Reduce sum */
+	let _matrix_reduce_sum = function(arr){
+		if(!Array.isArray(arr)) throw "MatrixException : first parameter is not array.";
+		else {
+			let reducer = function(prev, curr){
+				const prevSum = (Array.isArray(prev))?prev.reduce(reducer):prev;
+				const currSum = (Array.isArray(curr))?curr.reduce(reducer):curr;
+				return prevSum + currSum;
+			};
+			return arr.reduce(reducer);
+		}
+	};
+
 	/* Evaluate function */
 	let _eval_mat = function(arr1, func) {
 		if(!Array.isArray(arr1)) throw "MatrixException : first parameter is not array.";
@@ -120,6 +161,15 @@ const DlMatrix = function(ctxRoot){
 		if(Array.isArray(arr2)) return _matrix_mul(arr1, arr2);
 		else if(!isNaN(arr2)) return _scalar_mul(arr1, arr2);
 		else null;
+	};
+	_root.DlMatrix.max = function(arr){
+		return _matrix_max(arr);
+	};
+	_root.DlMatrix.min = function(arr){
+		return _matrix_min(arr);
+	};
+	_root.DlMatrix.reduce_sum = function(arr){
+		return _matrix_reduce_sum(arr);
 	};
 	_root.DlMatrix.eval = function(arr, func){
 		return _eval_mat(arr, func);

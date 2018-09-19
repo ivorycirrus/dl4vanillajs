@@ -21,6 +21,87 @@ const DlMatrix = function(ctxRoot){
 			if(_size) return _size;
 		}
 	};
+
+	/* Transpose */
+	let _matrix_transpose = function(arr) {
+		const arr_shape = _matrix_shape(arr);
+		if(!arr_shape){
+			throw "MatrixException : parameter is not array.";
+		} else if(arr_shape.length == 1) {
+			let tr_arr = [];
+			for(let i = 0 ; i < arr.length ; i++) tr_arr.push([arr[i]]);
+			return tr_arr;
+		} else if(arr_shape.length == 2) {
+			let tr_arr = [];
+			for(let i = 0 ; i < arr_shape[1] ; i++) {
+				let tr_row = [];
+				for(let j = 0 ; j < arr_shape[0] ; j++) {
+					tr_row.push(arr[j][i]);
+				}
+				tr_arr.push(tr_row);
+			}
+			return tr_arr;
+		} else {
+			throw "MatrixException : transpose only works 1-d and 2-d arrays.";			
+		}
+	};
+
+	/* Flat */
+	let _matrix_flat = function(arr){
+		if(!Array.isArray(arr)){
+			throw "MatrixException : parameter is not array.";
+		}
+
+		const flatten = function(arr) {
+			return arr.reduce(function (flat, toFlatten) {
+				return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+			}, []);
+		};
+		return flatten(arr);
+	}
+
+	/* Reshape */
+	let _matrix_reshape = function(arr, shape) {
+		if(!Array.isArray(arr) && !Array.isArray(shape)){
+			throw "MatrixException : parameters are not array.";
+		} else if(!shape.every(x=>(typeof x == `number` || x == 0))) {
+			throw "MatrixException : second parameter is 1-d number(exclude zero) array.";
+		}  else if(shape.filter(x=>x<0) > 1) {
+			throw "MatrixException : infered index allows only 1 cell.";
+		}
+		
+		const flatted = _matrix_flat(arr);
+
+		let infered_size = -1;
+		let output_size = shape.reduce((prev,next)=>(next>0?prev*next:prev), 1);
+		if(output_size < flatted.length) {
+			infered_size = flatted.length/output_size;
+		} else if(output_size > flatted.length) {
+			throw "MatrixException : output size is larger than input size.";
+		}
+		
+		let arr_pointer = 0;
+		let func_reshape = function(flat_arr, child_shape) {
+			let curr_layer;
+			let curr_size = (child_shape[0]>0?child_shape[0]:infered_size);
+			if(child_shape.length == 1) {
+				const next_pointer = arr_pointer + curr_size;
+				if(flat_arr.length < next_pointer) throw "MatrixException : cannnot reshape size.";
+				else {
+					curr_layer = flat_arr.slice(arr_pointer, next_pointer);
+					arr_pointer = next_pointer;
+				}
+			} else {
+				curr_layer = [];
+				for(let i = 0 ; i < curr_size ; i++) {
+					curr_layer.push(func_reshape(flat_arr, child_shape.slice(1)));
+				}
+			}
+			return curr_layer;
+		}
+
+		return func_reshape(flatted, shape);
+	};
 	
 
 	/* Matrix addition */
@@ -151,6 +232,15 @@ const DlMatrix = function(ctxRoot){
 	/* Public methods */
 	_root.DlMatrix.shape = function(arr){
 		return _matrix_shape(arr, undefined);
+	};
+	_root.DlMatrix.tran = function(arr){
+		return _matrix_transpose(arr);
+	};
+	_root.DlMatrix.flat = function(arr){
+		return _matrix_flat(arr);
+	};
+	_root.DlMatrix.reshape = function(arr, shape){
+		return _matrix_reshape(arr, shape);
 	};
 	_root.DlMatrix.add = function(arr1, arr2){
 		if(Array.isArray(arr2)) return _matrix_add(arr1, arr2);

@@ -4,10 +4,10 @@ const DlActivationFunction = function(ctxRoot){
 
 	/* imports */
 	var mat;
-	if(require){
-		mat = require("../math/matrix");
-	} else {
+	if(typeof require === `undefined`){
 		mat = _root["DlMatrix"];
+	} else {
+		mat = require("../math/matrix");
 	}
 	if(!mat) throw "Import exception : DlMatrix module is not found. (DlActivationFunction)";
 
@@ -69,7 +69,7 @@ const DlActivationFunction = function(ctxRoot){
 };
 
 /* Export for node.js */
-if(module) {
+if(typeof module !== `undefined`) {
 	let ctx = DlActivationFunction();
 	module.exports = ctx.DlActivationFunction;
 }

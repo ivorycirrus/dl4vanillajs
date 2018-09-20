@@ -4,10 +4,10 @@ const DlLossFunction = function(ctxRoot){
 
 	/* imports */
 	var mat;
-	if(require){
-		mat = require("../math/matrix");
-	} else {
+	if(typeof require === `undefined`){
 		mat = _root["DlMatrix"];
+	} else {
+		mat = require("../math/matrix");
 	}
 	if(!mat) throw "Import exception : DlMatrix module is not found. (DlLossFunction)";
 
@@ -20,7 +20,7 @@ const DlLossFunction = function(ctxRoot){
 }
 
 /* Export for node.js */
-if(module) {
+if(typeof module !== `undefined`) {
 	let ctx = DlLossFunction();
 	module.exports = ctx.DlLossFunction;
 }

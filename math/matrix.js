@@ -270,7 +270,7 @@ const DlMatrix = function(ctxRoot){
 };
 
 /* Export for node.js */
-if(module) {
+if(typeof module !== `undefined`) {
 	let ctx = DlMatrix();
 	module.exports = ctx.DlMatrix;
 }

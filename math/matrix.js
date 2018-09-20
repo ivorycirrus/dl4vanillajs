@@ -2,6 +2,11 @@ const DlMatrix = function(ctxRoot){
 	let _root = ctxRoot?ctxRoot:{};
 	if(!_root.hasOwnProperty('DlMatrix')) _root.DlMatrix = {};
 
+	/* create matrix */
+	let _create_matrix = function(rows, cols, initial_value = 0){
+		return Array(rows).fill(initial_value).map(x => Array(cols).fill(initial_value));
+	};
+
 	/* Size of matrix */
 	let _matrix_shape = function(arr, _size){
 		if(Array.isArray(arr)) {
@@ -230,6 +235,9 @@ const DlMatrix = function(ctxRoot){
 	}
 
 	/* Public methods */
+	_root.DlMatrix.matrix = function(rows, cols, initial_value){
+		return _create_matrix(rows, cols, initial_value);
+	};
 	_root.DlMatrix.shape = function(arr){
 		return _matrix_shape(arr, undefined);
 	};

@@ -3,28 +3,23 @@ const DlMatrix = function(ctxRoot){
 	if(!_root.hasOwnProperty('DlMatrix')) _root.DlMatrix = {};
 
 	/* create matrix */
-	let _create_matrix = function(rows, cols, initial_value = 0){
-		return Array(rows).fill(initial_value).map(x => Array(cols).fill(initial_value));
+	let _create_matrix = function(size, initial_value = 0){
+		if(!Array.isArray(size) || size.length == 0) throw "MatrixException : size parameter is not array.";
+		else if(size.length == 1) return Array(size[0]).fill(initial_value);
+		else return Array(size[0]).fill(initial_value).map(() => _create_matrix(size.slice(1), initial_value));
 	};
 
 	/* Size of matrix */
-	let _matrix_shape = function(arr, _size){
-		if(Array.isArray(arr)) {
-			if(!arr || arr.length == 0) {
-				return _size?_size:[0];
-			} 
-
-			let size = _size?_size:[];
-			size.push(arr.length);
-
-			if(Array.isArray(arr[0])) {
-				size = size.concat(_root.DlMatrix.shape(arr[0], size));
-			}
-
-			return size;
-		} else {
-			if(_size) return _size;
+	let _matrix_shape = function(arr){
+		if(!Array.isArray(arr)) {
+			throw "MatrixException : parameter is not array.";
 		}
+
+		let size = [];
+		let retriever = a => Array.isArray(a)?(size.push(a.length),retriever(a[0])):null;
+		retriever(arr);
+		
+		return size;
 	};
 
 	/* Transpose */
@@ -129,12 +124,8 @@ const DlMatrix = function(ctxRoot){
 		if(!Array.isArray(arr1)) throw "MatrixException : first parameter is not array.";
 		else if(arr1.length == 0) return null;
 		else {
-			let result = [];
-			for(let i = 0 ; i < arr1.length ; i++) {
-				if(Array.isArray(arr1[i])) result[i] = _scalar_add(arr1[i], num);
-				else result[i] = arr1[i] + num;
-			}
-			return result;
+			let mapper = x => Array.isArray(x)?x.map(mapper):x+num;
+			return arr1.map(mapper);
 		}
 	};
 
@@ -170,12 +161,8 @@ const DlMatrix = function(ctxRoot){
 		if(!Array.isArray(arr1)) throw "MatrixException : first parameter is not array.";
 		else if(arr1.length == 0) return null;
 		else {
-			let result = [];
-			for(let i = 0 ; i < arr1.length ; i++) {
-				if(Array.isArray(arr1[i])) result[i] = _scalar_mul(arr1[i], num);
-				else result[i] = arr1[i] * num;
-			}
-			return result;
+			let mapper = x => Array.isArray(x)?x.map(mapper):x*num;
+			return arr1.map(mapper);
 		}
 	};
 
@@ -225,18 +212,14 @@ const DlMatrix = function(ctxRoot){
 		if(!Array.isArray(arr1)) throw "MatrixException : first parameter is not array.";
 		else if(typeof func != `function`) throw "MatrixException : second parameter is not function.";
 		else {
-			let result = [];
-			for(let i = 0 ; i < arr1.length ; i++) {
-				if(Array.isArray(arr1[i])) result[i] = _eval_mat(arr1[i], func);
-				else result[i] = func(arr1[i]);
-			}
-			return result;
+			let mapper = x => Array.isArray(x)?x.map(mapper):func(x);
+			return arr1.map(mapper);
 		}
 	}
 
 	/* Public methods */
-	_root.DlMatrix.matrix = function(rows, cols, initial_value){
-		return _create_matrix(rows, cols, initial_value);
+	_root.DlMatrix.matrix = function(size, initial_value){
+		return _create_matrix(size, initial_value);
 	};
 	_root.DlMatrix.shape = function(arr){
 		return _matrix_shape(arr, undefined);

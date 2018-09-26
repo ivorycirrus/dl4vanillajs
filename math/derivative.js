@@ -13,16 +13,11 @@ const DlDerivative = function(ctxRoot){
 
 
 	/* Numerical Gradient */
-	let _gradient = function(f, x, h=0.0001) {
-		return (f(x+h) - f(x-h)) / (2.0*h);
-	};
 	let _numerical_gradient = function(f, x, h=0.0001) {
 		if(typeof f !== `function`) {
 			throw "DerivativeException : first parameter is not function";
 		} else if(Array.isArray(x)) {
-			return mat.eval(x, _x => _gradient(f, _x, h));
-		} else if(!isNaN(x)) {
-			return _gradient(f, x, h);
+			return mat.mul( mat.add(f(mat.add(x,h)), -f(mat.add(x,-h))), 1.0/(2.0*h));
 		} else {
 			throw "DerivativeException : second parameter is suitable";
 		}

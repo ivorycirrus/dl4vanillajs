@@ -28,8 +28,8 @@ const DlOptimizer = function(ctxRoot){
 			else {
 				let result = [];
 				for(let i = 0 ; i < _x.length ; i++) {
-					if(Array.isArray(_x[i])) result[i] = learn(_x[i], _grad[i]);
-					else result[i] = _x[i] - lr*_grad[i];
+					if(Array.isArray(_x[i])) result[i] = learn(_x[i], _grad);
+					else result[i] = _x[i] - lr*(Array.isArray(_grad)?_grad[i]:_grad);
 				}
 				return result;
 			}

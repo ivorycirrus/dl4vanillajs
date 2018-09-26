@@ -12,7 +12,7 @@ const DlLossFunction = function(ctxRoot){
 	if(!mat) throw "Import exception : DlMatrix module is not found. (DlLossFunction)";
 
 	/* Mean Square Error = 0.5 * sum{k}((y_k - t_k)^2) */
-	let _mean_square_error = function(y, t){		
+	let _mean_square_error = function(y, t, batch_size=1){		
 		if(!Array.isArray(y) || !Array.isArray(t)) throw "MSEException : parameters are only alows array type.";
 
 		const shape_y = mat.shape(y);
@@ -30,14 +30,14 @@ const DlLossFunction = function(ctxRoot){
 			sum += (err*err);
 		}
 
-		return 0.5*sum;
+		return 0.5*sum/batch_size;
 	};
 
 	/* 
 	Cross Entropy Error = -1.0 * sum{k}(t_k * log(y_k))
 	                    = -1.0 * sum{k}(t_k * log(y_k + h))  || h := small value to prevent -INF 
 	*/
-	let _cross_entropy_error = function(y, t, h=0.0000000001){		
+	let _cross_entropy_error = function(y, t, batch_size=1, h=0.0000000001){		
 		if(!Array.isArray(y) || !Array.isArray(t)) throw "CEEException : parameters are only alows array type.";
 
 		const shape_y = mat.shape(y);
@@ -54,14 +54,14 @@ const DlLossFunction = function(ctxRoot){
 			sum += (flat_t[i] * Math.log(flat_y[i] + h));
 		}
 
-		return -1.0*sum;
+		return -1.0*sum/batch_size;
 	};
 
 	/* Public methods */
-	_root.DlLossFunction.mean_square_error = function(y, t){
+	_root.DlLossFunction.mean_square_error = function(y, t, batch_size){
 		return _mean_square_error(y, t);
 	};
-	_root.DlLossFunction.cross_entropy_error = function(y, t){
+	_root.DlLossFunction.cross_entropy_error = function(y, t, batch_size){
 		return _cross_entropy_error(y, t);
 	};
 

@@ -135,7 +135,8 @@ const DlMatrix = function(ctxRoot){
 
 	/* Scalar addition */
 	let _scalar_add = function(arr1, num){
-		if(!Array.isArray(arr1)) throw "MatrixException : first parameter is not array.";
+		if(typeof arr1 === `number`) return arr1+num;
+		else if(!Array.isArray(arr1)) throw "MatrixException : first parameter is not array.";
 		else if(arr1.length == 0) return null;
 		else {
 			let mapper = x => Array.isArray(x)?x.map(mapper):x+num;
@@ -172,7 +173,8 @@ const DlMatrix = function(ctxRoot){
 
 	/* Scalar multiply */
 	let _scalar_mul = function(arr1, num){
-		if(!Array.isArray(arr1)) throw "MatrixException : first parameter is not array.";
+		if(typeof arr1 === `number`) return arr1*num;
+		else if(!Array.isArray(arr1)) throw "MatrixException : first parameter is not array.";
 		else if(arr1.length == 0) return null;
 		else {
 			let mapper = x => Array.isArray(x)?x.map(mapper):x*num;
@@ -272,6 +274,9 @@ const DlMatrix = function(ctxRoot){
 	};
 	_root.DlMatrix.reduce_sum = function(arr){
 		return _matrix_reduce_sum(arr);
+	};
+	_root.DlMatrix.reduce_mean = function(arr){
+		return _matrix_reduce_sum(arr)/_matrix_shape(arr).reduce((prev,next)=>prev*next);
 	};
 	_root.DlMatrix.eval = function(arr, func){
 		return _eval_mat(arr, func);

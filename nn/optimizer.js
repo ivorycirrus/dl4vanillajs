@@ -39,7 +39,7 @@ const DlOptimizer = function(ctxRoot){
 	};
 
 	/* Public methods */
-	_root.DlOptimizer.gd = function(f, x, learn_rate){
+	_root.DlOptimizer.gradient_decent_optimizer = function(f, x, learn_rate){
 		return _gradient_decent_optimizer(f, x, learn_rate);
 	};
 

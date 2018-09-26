@@ -119,6 +119,20 @@ const DlMatrix = function(ctxRoot){
 		}
 	};
 
+	/* Matrix addition with vector */
+	let _matrix_add_with_vector = function(arr, vec){
+		if(!Array.isArray(arr) || !Array.isArray(vec)) throw "11MatrixException : parameters are not array.";
+		else if(arr.length == 0) return null;
+		else {
+			let result = [];
+			for(let i = 0 ; i < arr.length ; i++) {
+				if(Array.isArray(arr[i])) result[i] = _matrix_add(arr[i], vec);
+				else result[i] = arr[i] + vec[i];
+			}
+			return result;
+		}
+	};
+
 	/* Scalar addition */
 	let _scalar_add = function(arr1, num){
 		if(!Array.isArray(arr1)) throw "MatrixException : first parameter is not array.";
@@ -234,14 +248,21 @@ const DlMatrix = function(ctxRoot){
 		return _matrix_reshape(arr, shape);
 	};
 	_root.DlMatrix.add = function(arr1, arr2){
-		if(Array.isArray(arr2)) return _matrix_add(arr1, arr2);
-		else if(!isNaN(arr2)) return _scalar_add(arr1, arr2);
-		else null;
+		if(Array.isArray(arr1) && Array.isArray(arr2)) {
+			const s1 = _matrix_shape(arr1);
+			const s2 = _matrix_shape(arr2);
+			if(s2.length == 1 && s1[s1.length-1] == s2[0]) return _matrix_add_with_vector(arr1, arr2);
+			else return _matrix_add(arr1, arr2);
+		} else if(!isNaN(arr2)) {
+			return _scalar_add(arr1, arr2);
+		} else {
+			return null;
+		}
 	};
 	_root.DlMatrix.mul = function(arr1, arr2){
 		if(Array.isArray(arr2)) return _matrix_mul(arr1, arr2);
 		else if(!isNaN(arr2)) return _scalar_mul(arr1, arr2);
-		else null;
+		else return null;
 	};
 	_root.DlMatrix.max = function(arr){
 		return _matrix_max(arr);

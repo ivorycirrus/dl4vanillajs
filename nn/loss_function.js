@@ -37,7 +37,7 @@ const DlLossFunction = function(ctxRoot){
 	Cross Entropy Error = -1.0 * sum{k}(t_k * log(y_k))
 	                    = -1.0 * sum{k}(t_k * log(y_k + h))  || h := small value to prevent -INF 
 	*/
-	let _cross_entropy_error = function(y, t, batch_size=1, h=0.0000000001){		
+	let _cross_entropy_error = function(y, t, batch_size=1, h=0.0001){
 		if(!Array.isArray(y) || !Array.isArray(t)) throw "CEEException : parameters are only alows array type.";
 
 		const shape_y = mat.shape(y);
@@ -56,6 +56,27 @@ const DlLossFunction = function(ctxRoot){
 
 		return -1.0*sum/batch_size;
 	};
+	
+	/* Cross Entropy with Logits */
+	let _cross_entropy_with_logits = function(y, t, batch_size=1, h=0.0001){
+		if(!Array.isArray(y) || !Array.isArray(t)) throw "CEEException : parameters are only alows array type.";
+		
+		const shape_y = mat.shape(y);
+		const shape_t = mat.shape(t);
+		if(shape_y.reduce((p,n)=>p*n) != shape_t.reduce((p,n)=>p*n)) {
+			throw "CEEException : input arrays are not same size.";
+		}
+
+		const flat_y = (shape_y.length == 1)?y:mat.flat(y);
+		const flat_t = (shape_t.length == 1)?t:mat.flat(t);
+
+		let sum = 0;
+		for(let i = 0 ; i < flat_y.length ; i++) {
+			sum += (flat_t[i]*Math.log(flat_y[i]+h) + (1-flat_t[i])*Math.log(1-flat_y[i]+h));
+		}
+
+		return -1.0*sum/batch_size;
+	};
 
 	/* Public methods */
 	_root.DlLossFunction.mean_square_error = function(y, t, batch_size){
@@ -63,6 +84,9 @@ const DlLossFunction = function(ctxRoot){
 	};
 	_root.DlLossFunction.cross_entropy_error = function(y, t, batch_size){
 		return _cross_entropy_error(y, t);
+	};
+	_root.DlLossFunction.cross_entropy_with_logits = function(y, t, batch_size){
+		return _cross_entropy_with_logits(y, t);
 	};
 
 	/* Export */

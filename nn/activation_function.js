@@ -44,7 +44,7 @@ const DlActivationFunction = function(ctxRoot){
 	let _relu = function(arr){		
 		if(Array.isArray(arr)) {
 			let mapper = function(x){				
-				if(Array.isArray(x)) return k.map(mapper);
+				if(Array.isArray(x)) return x.map(mapper);
 				else return (x>0)?x:0;
 			};
 			return arr.map(mapper);

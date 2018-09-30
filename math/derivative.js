@@ -17,7 +17,7 @@ const DlDerivative = function(ctxRoot){
 		if(typeof f !== `function`) {
 			throw "DerivativeException : first parameter is not function";
 		} else if(Array.isArray(x)) {
-			return mat.mul( mat.add(f(mat.add(x,h)), -f(mat.add(x,-h))), 1.0/(2.0*h));
+			return (f(mat.add(x,h)) - f(mat.add(x,-h)))/(2.0*h);
 		} else {
 			throw "DerivativeException : second parameter is suitable";
 		}

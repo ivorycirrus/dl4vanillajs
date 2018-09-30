@@ -1,0 +1,24 @@
+{
+  "name": "dl4vanillajs",
+  "version": "0.1.0",
+  "description": "Deep Learning Library using VanillaJS(Pure Javasctipt)",
+  "main": "dl4vanilla.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivorycirrus/dl4vanillajs.git"
+  },
+  "keywords": [
+    "deeplearning",
+    "ann",
+    "mlp"
+  ],
+  "author": "IvoryCirrus",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ivorycirrus/dl4vanillajs/issues"
+  },
+  "homepage": "https://github.com/ivorycirrus/dl4vanillajs#readme"
+}

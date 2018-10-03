@@ -223,6 +223,16 @@ const DlMatrix = function(ctxRoot){
 		}
 	};
 
+	/* Reduce mean */
+	let _matrix_reduce_mean = function(arr){
+		if(!Array.isArray(arr)) throw "MatrixException : first parameter is not array.";
+		else {
+			let flat = _matrix_flat(arr);
+			if(flat.length == 0) throw "MatrixException : cannot find mean in empty array.";
+			else return _matrix_reduce_sum(flat)/flat.length;
+		}
+	};
+
 	/* Evaluate function */
 	let _eval_mat = function(arr1, func) {
 		if(!Array.isArray(arr1)) throw "MatrixException : first parameter is not array.";
@@ -279,7 +289,7 @@ const DlMatrix = function(ctxRoot){
 		return _matrix_reduce_sum(arr);
 	};
 	_root.DlMatrix.reduce_mean = function(arr){
-		return _matrix_reduce_sum(arr)/_matrix_shape(arr).reduce((prev,next)=>prev*next);
+		return _matrix_reduce_mean(arr);
 	};
 	_root.DlMatrix.eval = function(arr, func){
 		return _eval_mat(arr, func);

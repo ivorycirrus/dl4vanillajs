@@ -6,8 +6,8 @@ const DlMatrix = function(ctxRoot){
 	let _create_matrix = function(size, initial_value = 0){
 		let initFunc = (typeof initial_value === `function`)?initial_value:x=>initial_value;
 		if(!Array.isArray(size) || size.length == 0) throw "MatrixException : size parameter is not array.";
-		else if(size.length == 1) return Array(size[0]).fill(initFunc());
-		else return Array(size[0]).fill(initFunc()).map(() => _create_matrix(size.slice(1), initFunc()));
+		else if(size.length == 1) return Array(size[0]).fill(0).map(x=>initFunc());
+		else return Array(size[0]).fill(0).map(() => _create_matrix(size.slice(1), initFunc()));
 	};
 
 	/* Size of matrix */

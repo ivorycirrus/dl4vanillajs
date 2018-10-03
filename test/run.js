@@ -11,7 +11,7 @@ console.log(`Test coverage setted by '${targetModule}'.`);
 /* Supported test suits */
 const testSuites = {
 	"math.matrix" : "./suite_math_matrix.js"
-	, "math.derivative" : "./suite_math_derivates.js"
+	, "math.derivative" : "./suite_math_derivative.js"
 };
 
 /* Suit names to run test */

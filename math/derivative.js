@@ -17,7 +17,29 @@ const DlDerivative = function(ctxRoot){
 		if(typeof f !== `function`) {
 			throw "DerivativeException : first parameter is not function";
 		} else if(Array.isArray(x)) {
-			return (f(mat.add(x,h)) - f(mat.add(x,-h)))/(2.0*h);
+			const _partial_diff = function(arr){				
+				let grad = [];
+				if(Array.isArray(arr[0])) {
+					for(let i = 0 ; i < arr.length ; i++){
+						grad.push(_partial_diff(arr[i]));
+					}		
+				} else {
+					for(let i = 0 ; i < arr.length ; i++){
+						let temp = arr[i];
+						arr[i] = temp+h;
+						let dhp = f(x);
+
+						arr[i] = temp-h;
+						let dhn = f(x);
+
+						arr[i] = temp;
+						grad.push((dhp-dhn)/(2.0*h));
+					}
+				}
+				return grad;
+			};
+			
+			return _partial_diff(x);
 		} else {
 			throw "DerivativeException : second parameter is suitable";
 		}

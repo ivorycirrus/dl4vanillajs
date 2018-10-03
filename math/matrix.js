@@ -4,9 +4,10 @@ const DlMatrix = function(ctxRoot){
 
 	/* create matrix */
 	let _create_matrix = function(size, initial_value = 0){
+		let initFunc = (typeof initial_value === `function`)?initial_value:x=>initial_value;
 		if(!Array.isArray(size) || size.length == 0) throw "MatrixException : size parameter is not array.";
-		else if(size.length == 1) return Array(size[0]).fill(initial_value);
-		else return Array(size[0]).fill(initial_value).map(() => _create_matrix(size.slice(1), initial_value));
+		else if(size.length == 1) return Array(size[0]).fill(initFunc());
+		else return Array(size[0]).fill(initFunc()).map(() => _create_matrix(size.slice(1), initFunc()));
 	};
 
 	/* Size of matrix */
@@ -260,11 +261,14 @@ const DlMatrix = function(ctxRoot){
 		} else {
 			return null;
 		}
-	};
+	};	
 	_root.DlMatrix.mul = function(arr1, arr2){
 		if(Array.isArray(arr2)) return _matrix_mul(arr1, arr2);
 		else if(!isNaN(arr2)) return _scalar_mul(arr1, arr2);
 		else return null;
+	};
+	_root.DlMatrix.sub = function(arr1, arr2){
+		return _root.DlMatrix.add(arr1, _root.DlMatrix.mul(arr2, -1));
 	};
 	_root.DlMatrix.max = function(arr){
 		return _matrix_max(arr);

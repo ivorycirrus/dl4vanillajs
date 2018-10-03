@@ -1,6 +1,7 @@
 /* Input test names from shell */
-const _requested = process.argv.slice(2)[0];
-const requested = (!_requested || _requested===`all`)?"all":_requested;
+const argv = process.argv.slice(2);
+const targetModule = (argv && argv.length > 0)?argv[0]:'all';
+console.log(`Test coverage setted by '${targetModule}'.`);
 
 /* Supported test suits */
 const testSuites = {
@@ -9,27 +10,43 @@ const testSuites = {
 };
 
 /* Suit names to run test */
-const tests = Object.keys(testSuites).filter(k=>(requested===`all`||k.startsWith(requested)));
-
-/* Run Tests */
-let result = {
-	"total" : 0
-	,"pass" : 0
-	,"fail" : 0
-	,"suites" : []
-};
-
-for(k in tests) {
-	let suite = require(testSuites[k]);
-
-	let suiteResult = suite.run(requested);
-	
-	result.total += suiteResult.total;
-	result.pass += suiteResult.pass;
-	result.fail += suiteResult.fail;
-	result.suites.push(suiteResult);
+const tests = Object.keys(testSuites).filter(k=>(targetModule===`all`||k.startsWith(targetModule)));
+if(!tests || tests.length == 0) {
+	console.error(`\x1b[31m\[ERROR\]\x1b[0m '${targetModule}' is not available.`);
+	process.exit(1);
+} else {
+	console.log(`${tests.length} of modules are prepared.`);
 }
 
+/* Result */
+let result = {
+	"pass" : 0
+	,"fail" : 0
+	,"suites" : []
+	,"error" : []
+};
+
+/* Run Tests */
+console.log("==[Test Start]=======================================");
+tests.forEach( function(k){
+	try { 
+		console.log("[Module] "+k);
+		
+		// do test
+		let suite = require(testSuites[k]);
+		let suiteResult = suite.run(targetModule);
+
+		// write result
+		result.pass += suiteResult.pass;
+		result.fail += suiteResult.fail;
+		result.suites.push(suiteResult);
+	} catch(e) {
+		console.error(`\t\x1b[31m\[ERROR\]\x1b[0m ${(e&&e.code)?e.code:e}`);
+		return;
+	}
+});
+console.log("==[Test Finished]=======================================");
+
 /* Reporting */
-// TODO : not implemented yet
-console.log(result);
+console.log(`Total ${result.pass+result.fail} tests are performed.`);
+console.log(`Passed : \x1b[32m${result.pass}\x1b[0m / Failed : \x1b[31m${result.fail}\x1b[0m`);

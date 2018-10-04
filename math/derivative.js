@@ -27,10 +27,10 @@ const DlDerivative = function(ctxRoot){
 					for(let i = 0 ; i < arr.length ; i++){
 						let temp = arr[i];
 						arr[i] = temp+h;
-						let dhp = f(x);
+						let dhp = f(arr[i]);
 
 						arr[i] = temp-h;
-						let dhn = f(x);
+						let dhn = f(arr[i]);
 
 						arr[i] = temp;
 						grad.push((dhp-dhn)/(2.0*h));

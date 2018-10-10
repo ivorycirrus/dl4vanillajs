@@ -1,10 +1,10 @@
 {
   "name": "dl4vanillajs",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Deep Learning Library using VanillaJS(Pure Javasctipt)",
   "main": "dl4vanilla.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/run.js"
   },
   "repository": {
     "type": "git",

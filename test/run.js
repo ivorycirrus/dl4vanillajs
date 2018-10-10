@@ -12,6 +12,9 @@ console.log(`Test coverage setted by '${targetModule}'.`);
 const testSuites = {
 	"math.matrix" : "./suite_math_matrix.js"
 	, "math.derivative" : "./suite_math_derivative.js"
+	, "nn.activation_function" : "./suite_nn_activation.js"
+	, "nn.loss_function" : "./suite_nn_loss.js"
+	, "nn.optimizer" : "./suite_nn_optimizer.js"
 };
 
 /* Suit names to run test */

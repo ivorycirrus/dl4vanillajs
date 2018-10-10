@@ -76,16 +76,9 @@ console.log(Y1);
 
 
 ## Test
-
-### - prepare test codes
-Clone source codes from **master** branch
-```
-$ git clone https://github.com/ivorycirrus/dl4vanillajs.git
-```
+Test code also has no dependencies. you can just run test sctipt using **node.js**.
 
 ### - run whole tests
-Run test script using node.js.<br/>
-Test code also has no dependencies. you can just run test sctipt using **node.js**.
 ```
 $ node test/run.js
 ```

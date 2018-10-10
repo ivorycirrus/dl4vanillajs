@@ -1,3 +1,5 @@
+/* Module Start */ (function(){
+
 const DlOptimizer = function(ctxRoot){
 	let _root = ctxRoot?ctxRoot:{};
 	if(!_root.hasOwnProperty('DlOptimizer')) _root.DlOptimizer = {};
@@ -23,19 +25,9 @@ const DlOptimizer = function(ctxRoot){
 		}
 
 		let grad = diff.grad(f, x);
-		let learn = function(_x, _grad){
-			if(_x.length == 0) return null;
-			else {
-				let result = [];
-				for(let i = 0 ; i < _x.length ; i++) {
-					if(Array.isArray(_x[i])) result[i] = learn(_x[i], _grad);
-					else result[i] = _x[i] - lr*(Array.isArray(_grad)?_grad[i]:_grad);
-				}
-				return result;
-			}
-		};
+		let trained = mat.add(x, mat.mul(grad, -1.0*lr));
 
-		return learn(x, grad);
+		return trained;
 	};
 
 	/* Public methods */
@@ -51,4 +43,8 @@ const DlOptimizer = function(ctxRoot){
 if(typeof module !== `undefined`) {
 	let ctx = DlOptimizer();
 	module.exports = ctx.DlOptimizer;
+} else if(typeof window !== `undefined`) {
+	window.DlOptimizer = DlOptimizer;	
 }
+
+/* Module End */ })();

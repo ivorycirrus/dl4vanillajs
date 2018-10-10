@@ -1,3 +1,5 @@
+/* Module Start */ (function(){
+
 const DlDerivative = function(ctxRoot){
 	let _root = ctxRoot?ctxRoot:{};
 	if(!_root.hasOwnProperty('DlDerivative')) _root.DlDerivative = {};
@@ -13,11 +15,33 @@ const DlDerivative = function(ctxRoot){
 
 
 	/* Numerical Gradient */
-	let _numerical_gradient = function(f, x, h=0.0001) {
+	let _numerical_gradient = function(f, x, h=0.0000001) {
 		if(typeof f !== `function`) {
 			throw "DerivativeException : first parameter is not function";
 		} else if(Array.isArray(x)) {
-			return (f(mat.add(x,h)) - f(mat.add(x,-h)))/(2.0*h);
+			const _partial_diff = function(arr){				
+				let grad = [];
+				if(Array.isArray(arr[0])) {
+					for(let i = 0 ; i < arr.length ; i++){
+						grad.push(_partial_diff(arr[i]));
+					}		
+				} else {
+					for(let i = 0 ; i < arr.length ; i++){
+						let temp = arr[i];
+						arr[i] = temp+h;
+						let dhp = f(arr[i]);
+
+						arr[i] = temp-h;
+						let dhn = f(arr[i]);
+
+						arr[i] = temp;
+						grad.push((dhp-dhn)/(2.0*h));
+					}
+				}
+				return grad;
+			};
+			
+			return _partial_diff(x);
 		} else {
 			throw "DerivativeException : second parameter is suitable";
 		}
@@ -36,4 +60,8 @@ const DlDerivative = function(ctxRoot){
 if(typeof module !== `undefined`) {
 	let ctx = DlDerivative();
 	module.exports = ctx.DlDerivative;
+} else if(typeof window !== `undefined`) {
+	window.DlDerivative = DlDerivative;	
 }
+
+/* Module End */ })();

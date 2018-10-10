@@ -1,12 +1,15 @@
+/* Module Start */ (function(){
+
 const DlMatrix = function(ctxRoot){
 	let _root = ctxRoot?ctxRoot:{};
 	if(!_root.hasOwnProperty('DlMatrix')) _root.DlMatrix = {};
 
 	/* create matrix */
 	let _create_matrix = function(size, initial_value = 0){
+		let initFunc = (typeof initial_value === `function`)?initial_value:x=>initial_value;
 		if(!Array.isArray(size) || size.length == 0) throw "MatrixException : size parameter is not array.";
-		else if(size.length == 1) return Array(size[0]).fill(initial_value);
-		else return Array(size[0]).fill(initial_value).map(() => _create_matrix(size.slice(1), initial_value));
+		else if(size.length == 1) return Array(size[0]).fill(0).map(x=>initFunc());
+		else return Array(size[0]).fill(0).map(() => _create_matrix(size.slice(1), initFunc));
 	};
 
 	/* Size of matrix */
@@ -119,20 +122,6 @@ const DlMatrix = function(ctxRoot){
 		}
 	};
 
-	/* Matrix addition with vector */
-	let _matrix_add_with_vector = function(arr, vec){
-		if(!Array.isArray(arr) || !Array.isArray(vec)) throw "11MatrixException : parameters are not array.";
-		else if(arr.length == 0) return null;
-		else {
-			let result = [];
-			for(let i = 0 ; i < arr.length ; i++) {
-				if(Array.isArray(arr[i])) result[i] = _matrix_add(arr[i], vec);
-				else result[i] = arr[i] + vec[i];
-			}
-			return result;
-		}
-	};
-
 	/* Scalar addition */
 	let _scalar_add = function(arr1, num){
 		if(typeof arr1 === `number`) return arr1+num;
@@ -141,6 +130,19 @@ const DlMatrix = function(ctxRoot){
 		else {
 			let mapper = x => Array.isArray(x)?x.map(mapper):x+num;
 			return arr1.map(mapper);
+		}
+	};
+
+	/* Matrix addition with vector */
+	let _matrix_add_with_vector = function(arr, vec){
+		if(!Array.isArray(arr) || !Array.isArray(vec)) throw "11MatrixException : parameters are not array.";
+		else if(arr.length == 0) return null;
+		else {
+			let result = [];
+			for(let i = 0 ; i < arr.length ; i++) {
+				result.push(_scalar_add(arr[i], vec[i][0]));
+			}
+			return result;
 		}
 	};
 
@@ -223,6 +225,16 @@ const DlMatrix = function(ctxRoot){
 		}
 	};
 
+	/* Reduce mean */
+	let _matrix_reduce_mean = function(arr){
+		if(!Array.isArray(arr)) throw "MatrixException : first parameter is not array.";
+		else {
+			let flat = _matrix_flat(arr);
+			if(flat.length == 0) throw "MatrixException : cannot find mean in empty array.";
+			else return _matrix_reduce_sum(flat)/flat.length;
+		}
+	};
+
 	/* Evaluate function */
 	let _eval_mat = function(arr1, func) {
 		if(!Array.isArray(arr1)) throw "MatrixException : first parameter is not array.";
@@ -253,18 +265,21 @@ const DlMatrix = function(ctxRoot){
 		if(Array.isArray(arr1) && Array.isArray(arr2)) {
 			const s1 = _matrix_shape(arr1);
 			const s2 = _matrix_shape(arr2);
-			if(s2.length == 1 && s1[s1.length-1] == s2[0]) return _matrix_add_with_vector(arr1, arr2);
+			if(s1.length == 2 && s2.length ==2 && s1[0] == s2[0] && s2[1] == 1) return _matrix_add_with_vector(arr1, arr2);
 			else return _matrix_add(arr1, arr2);
 		} else if(!isNaN(arr2)) {
 			return _scalar_add(arr1, arr2);
 		} else {
 			return null;
 		}
-	};
+	};	
 	_root.DlMatrix.mul = function(arr1, arr2){
 		if(Array.isArray(arr2)) return _matrix_mul(arr1, arr2);
 		else if(!isNaN(arr2)) return _scalar_mul(arr1, arr2);
 		else return null;
+	};
+	_root.DlMatrix.sub = function(arr1, arr2){
+		return _root.DlMatrix.add(arr1, _root.DlMatrix.mul(arr2, -1));
 	};
 	_root.DlMatrix.max = function(arr){
 		return _matrix_max(arr);
@@ -276,7 +291,7 @@ const DlMatrix = function(ctxRoot){
 		return _matrix_reduce_sum(arr);
 	};
 	_root.DlMatrix.reduce_mean = function(arr){
-		return _matrix_reduce_sum(arr)/_matrix_shape(arr).reduce((prev,next)=>prev*next);
+		return _matrix_reduce_mean(arr);
 	};
 	_root.DlMatrix.eval = function(arr, func){
 		return _eval_mat(arr, func);
@@ -290,4 +305,8 @@ const DlMatrix = function(ctxRoot){
 if(typeof module !== `undefined`) {
 	let ctx = DlMatrix();
 	module.exports = ctx.DlMatrix;
+} else if(typeof window !== `undefined`) {
+	window.DlMatrix = DlMatrix;	
 }
+
+/* Module End */ })();

@@ -41,16 +41,11 @@ const DlActivationFunction = function(ctxRoot){
 	ReLU(y) = { x  (x>0)
 	          { 0  (x<=0)
 	*/
-	let _relu = function(arr){		
-		if(Array.isArray(arr)) {
-			let mapper = function(x){				
-				if(Array.isArray(x)) return x.map(mapper);
-				else return (x>0)?x:0;
-			};
-			return arr.map(mapper);
-		} else {
-			throw "ReLUException : parameter has not suppoeted type.";
-		}
+	const _func_relu = (x) => x>0?x:0;
+	let _relu = function(arr){
+		if(typeof arr == `number`) return _func_relu(arr);
+		else if(Array.isArray(arr)) return mat.eval(arr, _func_relu);
+		else throw "ReLUException : parameter has not suppoeted type.";
 	};
 
 	/* Public methods */

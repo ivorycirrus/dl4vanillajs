@@ -1,3 +1,5 @@
+/* Module Start */ (function(){
+
 const DlLossFunction = function(ctxRoot){
 	let _root = ctxRoot?ctxRoot:{};
 	if(!_root.hasOwnProperty('DlLossFunction')) _root.DlLossFunction = {};
@@ -118,4 +120,8 @@ const DlLossFunction = function(ctxRoot){
 if(typeof module !== `undefined`) {
 	let ctx = DlLossFunction();
 	module.exports = ctx.DlLossFunction;
+} else if(typeof window !== `undefined`) {
+	window.DlLossFunction = DlLossFunction;	
 }
+
+/* Module End */ })();

@@ -1,3 +1,5 @@
+/* Module Start */ (function(){
+
 const DlMatrix = function(ctxRoot){
 	let _root = ctxRoot?ctxRoot:{};
 	if(!_root.hasOwnProperty('DlMatrix')) _root.DlMatrix = {};
@@ -303,4 +305,8 @@ const DlMatrix = function(ctxRoot){
 if(typeof module !== `undefined`) {
 	let ctx = DlMatrix();
 	module.exports = ctx.DlMatrix;
+} else if(typeof window !== `undefined`) {
+	window.DlMatrix = DlMatrix;	
 }
+
+/* Module End */ })();

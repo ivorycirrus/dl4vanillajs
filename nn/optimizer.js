@@ -1,3 +1,5 @@
+/* Module Start */ (function(){
+
 const DlOptimizer = function(ctxRoot){
 	let _root = ctxRoot?ctxRoot:{};
 	if(!_root.hasOwnProperty('DlOptimizer')) _root.DlOptimizer = {};
@@ -41,4 +43,8 @@ const DlOptimizer = function(ctxRoot){
 if(typeof module !== `undefined`) {
 	let ctx = DlOptimizer();
 	module.exports = ctx.DlOptimizer;
+} else if(typeof window !== `undefined`) {
+	window.DlOptimizer = DlOptimizer;	
 }
+
+/* Module End */ })();

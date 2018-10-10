@@ -1,3 +1,5 @@
+/* Module Start */ (function(){
+
 const DlActivationFunction = function(ctxRoot){
 	let _root = ctxRoot?ctxRoot:{};
 	if(!_root.hasOwnProperty('DlActivationFunction')) _root.DlActivationFunction = {};
@@ -67,4 +69,8 @@ const DlActivationFunction = function(ctxRoot){
 if(typeof module !== `undefined`) {
 	let ctx = DlActivationFunction();
 	module.exports = ctx.DlActivationFunction;
+} else if(typeof window !== `undefined`) {
+	window.DlActivationFunction = DlActivationFunction;	
 }
+
+/* Module End */ })();

@@ -1,3 +1,5 @@
+/* Module Start */ (function(){
+
 const DlDerivative = function(ctxRoot){
 	let _root = ctxRoot?ctxRoot:{};
 	if(!_root.hasOwnProperty('DlDerivative')) _root.DlDerivative = {};
@@ -13,7 +15,7 @@ const DlDerivative = function(ctxRoot){
 
 
 	/* Numerical Gradient */
-	let _numerical_gradient = function(f, x, h=0.0001) {
+	let _numerical_gradient = function(f, x, h=0.0000001) {
 		if(typeof f !== `function`) {
 			throw "DerivativeException : first parameter is not function";
 		} else if(Array.isArray(x)) {
@@ -58,4 +60,8 @@ const DlDerivative = function(ctxRoot){
 if(typeof module !== `undefined`) {
 	let ctx = DlDerivative();
 	module.exports = ctx.DlDerivative;
+} else if(typeof window !== `undefined`) {
+	window.DlDerivative = DlDerivative;	
 }
+
+/* Module End */ })();

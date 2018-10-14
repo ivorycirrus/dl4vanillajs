@@ -8,6 +8,12 @@ There are a web browser which supports Javascript/ECMA-Script, all of running an
 It is only a expermental approach, not optimized and not commertial purpose.
 
 
+## Demos
+* [dl4vanillajs-node-example](https://github.com/ivorycirrus/dl4vanillajs-node-example)
+    * simple binary classification
+    * xor problem
+
+
 ## Install
 **dl4vanillsjs** has no dependencies.<br/>
 You can download released archives or install from **npm**.
@@ -76,7 +82,7 @@ console.log(Y1);
 
 
 ## Test
-Test code also has no dependencies. you can just run test sctipt using **node.js**.
+You can run test sctipt using **node.js**.
 
 ### - run whole tests
 ```

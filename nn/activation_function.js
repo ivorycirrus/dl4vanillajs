@@ -25,15 +25,27 @@ const DlActivationFunction = function(ctxRoot){
 	Softmax(y_k) = exp(a_k) / sum{1_n}(exp(a_i))
 	             = exp(a_k + C) / sum{1_n}(exp(a_i + C))  when C = -max(a)
 	*/
+	const _func_sofrmax = function(arr){
+		const C = -mat.max(arr);
+		const sum = mat.reduce_sum(mat.eval(arr,function(x){return Math.exp(x+C);}));
+		let mapper = function(k){
+			if(Array.isArray(k)) return k.map(mapper);
+			else return Math.exp(k+C)/sum;
+		};
+		return arr.map(mapper);
+	};
 	let _softmax = function(arr){		
 		if(Array.isArray(arr)) {
-			const C = -mat.max(arr);
-			const sum = mat.reduce_sum(mat.eval(arr,function(x){return Math.exp(x+C);}));
-			let mapper = function(k){				
-				if(Array.isArray(k)) return k.map(mapper);
-				else return Math.exp(k+C)/sum;
-			};
-			return arr.map(mapper);
+			const shape = mat.shape(arr);
+			if(shape.length === 1) {
+				return _func_sofrmax(arr);
+			} else if(shape.length === 2) {
+				let ret = [];
+				arr.forEach((x)=>{ret.push(_func_sofrmax(x));});
+				return ret;
+			} else {
+				throw "SoftmaxException : parameter has not suppoeted shape.";
+			}
 		} else {
 			throw "SoftmaxException : parameter has not suppoeted type.";
 		}

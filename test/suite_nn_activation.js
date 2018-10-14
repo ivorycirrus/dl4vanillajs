@@ -175,6 +175,44 @@ const test_softmax = function(){
 		return true;
 	});
 
+	TEST("find softmax for batch jobs", result, function(){
+		const inputs = [
+			[0,1,0]
+			,[1,2,3,4,5]
+			,[0.1, 0.4, 0.9, 0.2, 0.7, 1.3, 4.8]
+		];
+		const expected = [ [ 
+			0.21194155761708544, 
+			0.5761168847658291, 
+			0.21194155761708544
+		], [ 
+			0.011656230956039605,
+			0.03168492079612427,
+			0.0861285444362687,
+			0.23412165725273662,
+			0.6364086465588308
+		], [ 
+			0.008280203488423614,
+			0.01117710560737017,
+			0.018427931759732865,
+			0.00915104009115431,
+			0.015087514447315752,
+			0.02749124372561744,
+			0.9103849608803858
+		] ];
+
+		let result = af.softmax(inputs);
+		if(!result || result.length !== inputs.length) throw "result value has wrong size";
+		for(let i = 0 ; i < inputs.length ; i++){
+			if(!result[i] || result[i].length !== inputs[i].length) throw "result value has wrong size";
+			for(let j = 0 ; j < result[i].length ; j++){
+				if(result[i][j] !== expected[i][j]) throw "softmax value is wrong";
+			}
+		}
+
+		return true;
+	});
+
 	return result;
 };
 

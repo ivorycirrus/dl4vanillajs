@@ -1,6 +1,6 @@
 {
   "name": "dl4vanillajs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Deep Learning Library using VanillaJS(Pure Javasctipt)",
   "main": "dl4vanilla.js",
   "scripts": {
